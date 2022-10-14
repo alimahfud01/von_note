@@ -29,6 +29,13 @@
             {
               "client_id": "761492499035-ae3ouhph1ipclpnsm0q63svqh8jmhijg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "761492499035-s5908v9m3pdmqiurae8dj2g138ovi6sc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.vonNote"
+              }
             }
           ]
         }
