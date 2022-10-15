@@ -17,6 +17,7 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  bool _indicatorVisibility = false;
   bool _obsText = true;
 
   @override
@@ -37,93 +38,119 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Register")),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                SvgPicture.asset(
-                  'assets/images/signup_vector.svg',
-                  height: MediaQuery.of(context).size.height * 0.3,
-                ),
-                const SizedBox(height: 60),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  controller: _email,
-                  decoration: InputDecoration(
-                    hintText: "Email",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: TextField(
-                    controller: _password,
-                    obscureText: _obsText,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                        hintText: "Password",
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/signup_vector.svg',
+                      height: MediaQuery.of(context).size.height * 0.3,
+                    ),
+                    const SizedBox(height: 60),
+                    TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _email,
+                      decoration: InputDecoration(
+                        hintText: "Email",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obsText = !_obsText;
-                              });
-                            },
-                            icon: Icon(_obsText
-                                ? Icons.visibility
-                                : Icons.visibility_off))),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Material(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)),
-                  elevation: 2.0,
-                  color: Theme.of(context).primaryColor,
-                  clipBehavior: Clip.antiAlias,
-                  child: MaterialButton(
-                    minWidth: 200,
-                    height: 48,
-                    color: Theme.of(context).primaryColor,
-                    child: const Text(
-                      "Register",
-                      style: TextStyle(color: Colors.white),
+                      ),
                     ),
-                    onPressed: () async {
-                      final email = _email.text;
-                      final password = _password.text;
-                      try {
-                        await AuthService.firebase().createUser(
-                          email: email,
-                          password: password,
-                        );
-                        await AuthService.firebase().sendEmailVerification();
-                        if (!mounted) return;
-                        showErrorDialog(
-                            context, 'Ok', "Registration Successful");
-                        Navigator.pushNamed(context, verifyEmailRoute);
-                      } on WeakPasswordAuthException {
-                        onlyTextSnackbar(context, "The Password Is Weak");
-                      } on EmailAlreadyInUseAuthException {
-                        onlyTextSnackbar(context, "Email Already In Use");
-                      } on InvalidEmailAuthException {
-                        onlyTextSnackbar(context, "Invalid Email");
-                      } on GenericAuthException {
-                        onlyTextSnackbar(context, "Authentication Error");
-                      }
-                    },
-                  ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: TextField(
+                        controller: _password,
+                        obscureText: _obsText,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                            hintText: "Password",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obsText = !_obsText;
+                                  });
+                                },
+                                icon: Icon(_obsText
+                                    ? Icons.visibility
+                                    : Icons.visibility_off))),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Material(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
+                      elevation: 2.0,
+                      color: Theme.of(context).primaryColor,
+                      clipBehavior: Clip.antiAlias,
+                      child: MaterialButton(
+                        minWidth: 200,
+                        height: 48,
+                        color: Theme.of(context).primaryColor,
+                        child: const Text(
+                          "Register",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          _indicatorVisibility = !_indicatorVisibility;
+                          setState(() {});
+                          final email = _email.text;
+                          final password = _password.text;
+                          try {
+                            await AuthService.firebase().createUser(
+                              email: email,
+                              password: password,
+                            );
+                            await AuthService.firebase()
+                                .sendEmailVerification();
+                            if (!mounted) return;
+                            _indicatorVisibility = !_indicatorVisibility;
+                            setState(() {});
+                            showErrorDialog(
+                                context, 'Ok', "Registration Successful");
+                            Navigator.pushNamed(context, verifyEmailRoute);
+                          } on WeakPasswordAuthException {
+                            _indicatorVisibility = !_indicatorVisibility;
+                            setState(() {});
+                            onlyTextSnackbar(context, "The Password Is Weak");
+                          } on EmailAlreadyInUseAuthException {
+                            _indicatorVisibility = !_indicatorVisibility;
+                            setState(() {});
+                            onlyTextSnackbar(context, "Email Already In Use");
+                          } on InvalidEmailAuthException {
+                            _indicatorVisibility = !_indicatorVisibility;
+                            setState(() {});
+                            onlyTextSnackbar(context, "Invalid Email");
+                          } on GenericAuthException {
+                            _indicatorVisibility = !_indicatorVisibility;
+                            setState(() {});
+                            onlyTextSnackbar(context, "Authentication Error");
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          Visibility(
+            visible: _indicatorVisibility,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Theme.of(context).highlightColor,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+          ),
+        ],
       ),
     );
   }

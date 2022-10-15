@@ -16,7 +16,7 @@ class MyThemes {
     ),
     backgroundColor: Colors.white,
     brightness: Brightness.light,
-    highlightColor: Colors.white,
+    highlightColor: const Color.fromARGB(153, 158, 158, 158),
     colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
   );
 

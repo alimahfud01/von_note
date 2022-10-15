@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants/routes.dart';
 import '../services/auth/auth_service.dart';
@@ -12,30 +14,91 @@ class VerifyEmailView extends StatefulWidget {
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
+  final user = AuthService.firebase().currentUser!.email;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Verify Email')),
-      body: Column(
-        children: [
-          const Text(
-              "We've sent you an email verification. Please open it to verify your account."),
-          const Text(
-              "If you haven't received a verification email yet, press the button below"),
-          TextButton(
-              onPressed: () async {
-                await AuthService.firebase().sendEmailVerification();
-                if (!mounted) return;
-                onlyTextSnackbar(context, "Email sent succesfully");
-              },
-              child: const Text("Send email verification")),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
-              },
-              child: const Text("Login"))
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              'assets/images/verify_email_vector.svg',
+              height: MediaQuery.of(context).size.height * 0.3,
+            ),
+            RichText(
+              text: TextSpan(
+                text: 'Hi ',
+                style: const TextStyle(color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: '$user',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const TextSpan(
+                      text:
+                          ", we've sent you email verification. Please open it to verify your email."),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Material(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),
+              elevation: 2.0,
+              color: Theme.of(context).primaryColor,
+              clipBehavior: Clip.antiAlias,
+              child: MaterialButton(
+                minWidth: 200,
+                height: 48,
+                color: Theme.of(context).primaryColor,
+                child: const Text(
+                  "Login here",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: RichText(
+                text: TextSpan(
+                  text: "Haven't received a verification email?",
+                  style: const TextStyle(
+                      color: Colors.black, fontStyle: FontStyle.italic),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: ' Resend',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          await AuthService.firebase().sendEmailVerification();
+                          if (!mounted) return;
+                          onlyTextSnackbar(context, "Email sent succesfully");
+                        },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

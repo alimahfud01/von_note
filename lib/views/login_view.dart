@@ -37,12 +37,12 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text("Login")),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Stack(children: [
-                Column(
+        body: Center(
+          child: Stack(children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
                   children: [
                     const SizedBox(height: 20),
                     SvgPicture.asset(
@@ -173,14 +173,18 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ],
                 ),
-                Center(
-                  child: Visibility(
-                      visible: _indicatorVisibility,
-                      child: const CircularProgressIndicator()),
-                ),
-              ]),
+              ),
             ),
-          ),
+            Visibility(
+              visible: _indicatorVisibility,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Theme.of(context).highlightColor,
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+            ),
+          ]),
         ));
   }
 }

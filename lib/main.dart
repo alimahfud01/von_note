@@ -7,7 +7,7 @@ import 'package:von_note/services/auth/auth_service.dart';
 import 'package:von_note/utilities/themes/custom_theme.dart';
 import 'package:von_note/utilities/themes/themes.dart';
 import 'package:von_note/views/login_view.dart';
-import 'package:von_note/views/notes/new_notes_view.dart';
+import 'package:von_note/views/notes/create_update_note_view.dart';
 import 'package:von_note/views/notes/notes_view.dart';
 import 'package:von_note/views/register_view.dart';
 import 'package:von_note/views/verify_email_view.dart';
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
-        newNoteRoute: (context) => const NewNoteView(),
+        createUpdateNoteView: (context) => const CreateUpdateNoteView(),
       },
       home: FutureBuilder(
         future: AuthService.firebase().initialize(),
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
 
   splash(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 25, 30, 70),
+      backgroundColor: const Color.fromARGB(255, 25, 30, 70),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
