@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "761492499035",
-    "project_id": "von-note",
-    "storage_bucket": "von-note.appspot.com"
+    "project_number": "861396676664",
+    "project_id": "von--note",
+    "storage_bucket": "von--note.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:761492499035:android:78f967b46fbd6196f2ed7e",
+        "mobilesdk_app_id": "1:861396676664:android:a038434e0c1e3cb5c6f6cd",
         "android_client_info": {
           "package_name": "com.example.von_note"
         }
       },
       "oauth_client": [
         {
-          "client_id": "761492499035-ae3ouhph1ipclpnsm0q63svqh8jmhijg.apps.googleusercontent.com",
+          "client_id": "861396676664-8mjvfo0bu8nebj0leofh3tjki9aqa4tn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBe6TKuP4mWV5cY3FOCcHqwWe55IIFqpgs"
+          "current_key": "AIzaSyAStl_boK1pj9_VF17ZgBXdU7n5t1r4rhI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "761492499035-ae3ouhph1ipclpnsm0q63svqh8jmhijg.apps.googleusercontent.com",
+              "client_id": "861396676664-8mjvfo0bu8nebj0leofh3tjki9aqa4tn.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "761492499035-s5908v9m3pdmqiurae8dj2g138ovi6sc.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.vonNote"
-              }
             }
           ]
         }
