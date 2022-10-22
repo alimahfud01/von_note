@@ -33,7 +33,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 style: const TextStyle(color: Colors.black),
                 children: <TextSpan>[
                   TextSpan(
-                    text: '$user',
+                    text: user,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       decoration: TextDecoration.underline,
