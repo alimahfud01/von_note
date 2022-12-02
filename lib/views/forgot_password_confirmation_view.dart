@@ -89,6 +89,7 @@ class Content extends StatelessWidget {
                                       context.read<AuthBloc>().add(
                                           AuthEventForgotPassword(
                                               email: args['email']));
+                                      Navigator.of(context).pop();
                                     },
                                 ),
                                 const TextSpan(

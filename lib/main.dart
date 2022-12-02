@@ -46,6 +46,10 @@ class HomePage extends StatelessWidget {
         forgotPasswordConfirmationView: (context) => BlocProvider.value(
               value: authBloc,
               child: const ForgotPasswordConfirmationView(),
+            ),
+        registerView: (context) => BlocProvider.value(
+              value: authBloc,
+              child: const RegisterView(),
             )
       },
       home: BlocProvider<AuthBloc>(
@@ -77,10 +81,12 @@ class Content extends StatelessWidget {
           return const VerifyEmailView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
-        } else if (state is AuthStateRegistering) {
-          return const RegisterView();
         } else {
-          return const LoginView();
+          return Scaffold(
+            body: LinearProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+          );
         }
       },
     );

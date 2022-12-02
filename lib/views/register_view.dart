@@ -17,7 +17,6 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-  bool _indicatorVisibility = false;
   bool _obsText = true;
 
   @override
@@ -40,22 +39,17 @@ class _RegisterViewState extends State<RegisterView> {
       listener: (context, state) {
         if (state is AuthStateRegistering) {
           if (state.exception is WeakPasswordAuthException) {
-            _indicatorVisibility = !_indicatorVisibility;
-            setState(() {});
             onlyTextSnackbar(context, "The Password Is Weak");
           } else if (state.exception is EmailAlreadyInUseAuthException) {
-            _indicatorVisibility = !_indicatorVisibility;
-            setState(() {});
             onlyTextSnackbar(context, "Email Already In Use");
           } else if (state.exception is GenericAuthException) {
-            _indicatorVisibility = !_indicatorVisibility;
-            setState(() {});
             onlyTextSnackbar(context, "Authentication Error");
           } else if (state.exception is InvalidEmailAuthException) {
-            _indicatorVisibility = !_indicatorVisibility;
-            setState(() {});
             onlyTextSnackbar(context, "Invalid Email");
           }
+        }
+        if (state is AuthStateNeedVerification) {
+          Navigator.of(context).pop();
         }
       },
       child: Scaffold(
@@ -121,8 +115,6 @@ class _RegisterViewState extends State<RegisterView> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
-                            _indicatorVisibility = !_indicatorVisibility;
-                            setState(() {});
                             final email = _email.text;
                             final password = _password.text;
                             context
@@ -134,15 +126,6 @@ class _RegisterViewState extends State<RegisterView> {
                     ],
                   ),
                 ),
-              ),
-            ),
-            Visibility(
-              visible: _indicatorVisibility,
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                color: Theme.of(context).highlightColor,
-                child: const Center(child: CircularProgressIndicator()),
               ),
             ),
           ],

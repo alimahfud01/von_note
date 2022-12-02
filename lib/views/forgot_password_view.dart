@@ -130,7 +130,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 25),
                   child: Material(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0)),

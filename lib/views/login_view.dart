@@ -4,7 +4,6 @@ import 'package:von_note/constants/routes.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import 'package:von_note/services/auth/bloc/auth_state.dart';
-import 'package:von_note/views/forgot_password_view.dart';
 import '../services/auth/auth_exception.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../utilities/snackbars/only_text_snackbar.dart';
@@ -104,9 +103,6 @@ class _LoginViewState extends State<LoginView> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
-                            context
-                                .read<AuthBloc>()
-                                .add(const AuthEventForgotPassword());
                             Navigator.of(context).pushNamed(forgotPasswordView);
                           },
                           child: Text(
@@ -153,6 +149,7 @@ class _LoginViewState extends State<LoginView> {
                               context
                                   .read<AuthBloc>()
                                   .add(const AuthEventShouldRegister());
+                              Navigator.of(context).pushNamed(registerView);
                             },
                             child: Text(
                               "Register here!",
