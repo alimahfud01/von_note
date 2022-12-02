@@ -8,6 +8,7 @@ import 'package:von_note/services/auth/bloc/auth_state.dart';
 import 'package:von_note/services/auth/firebase_auth_provider.dart';
 import 'package:von_note/utilities/themes/custom_theme.dart';
 import 'package:von_note/utilities/themes/themes.dart';
+import 'package:von_note/views/forgot_password_confirmation_view.dart';
 import 'package:von_note/views/forgot_password_view.dart';
 import 'package:von_note/views/login_view.dart';
 import 'package:von_note/views/notes/create_update_note_view.dart';
@@ -28,18 +29,27 @@ void main() async {
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final authBloc = AuthBloc(FirebaseAuthProvider());
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Von Note',
       theme: CustomTheme.of(context),
       routes: {
         createUpdateNoteView: (context) => const CreateUpdateNoteView(),
+        forgotPasswordView: (context) => BlocProvider.value(
+              value: authBloc,
+              child: const ForgotPasswordView(),
+            ),
+        forgotPasswordConfirmationView: (context) => BlocProvider.value(
+              value: authBloc,
+              child: const ForgotPasswordConfirmationView(),
+            )
       },
       home: BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(FirebaseAuthProvider()),
-          child: const Content()),
+          create: (context) => authBloc, child: const Content()),
     );
   }
 }
@@ -69,10 +79,8 @@ class Content extends StatelessWidget {
           return const LoginView();
         } else if (state is AuthStateRegistering) {
           return const RegisterView();
-        } else if (state is AuthStateForgotPassword) {
-          return const ForgotPasswordView();
         } else {
-          return const Splash();
+          return const LoginView();
         }
       },
     );

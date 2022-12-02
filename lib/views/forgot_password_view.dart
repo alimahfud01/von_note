@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:von_note/constants/routes.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import 'package:von_note/services/auth/bloc/auth_state.dart';
@@ -16,6 +17,22 @@ class ForgotPasswordView extends StatefulWidget {
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   late final TextEditingController _controller;
+  bool _emailOrPasswordIsEmpty = true;
+
+  void _textControllerListener() {
+    if (_controller.text.isNotEmpty) {
+      _emailOrPasswordIsEmpty = false;
+      setState(() {});
+    } else {
+      _emailOrPasswordIsEmpty = true;
+      setState(() {});
+    }
+  }
+
+  void _setupTextControllerListener() {
+    _controller.removeListener(_textControllerListener);
+    _controller.addListener(_textControllerListener);
+  }
 
   @override
   void initState() {
@@ -31,13 +48,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   @override
   Widget build(BuildContext context) {
+    _setupTextControllerListener();
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateForgotPassword) {
           if (state.hasSentEmail) {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ForgotPasswordConfirmationView(),
-            ));
+            Navigator.of(context).pushNamed(forgotPasswordConfirmationView,
+                arguments: {'email': _controller.text});
           }
           if (state.exception != null) {
             if (!mounted) return;
@@ -123,17 +140,21 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     child: MaterialButton(
                       minWidth: 200,
                       height: 48,
-                      color: Theme.of(context).primaryColor,
+                      color: _emailOrPasswordIsEmpty
+                          ? Colors.grey
+                          : Theme.of(context).primaryColor,
+                      onPressed: _emailOrPasswordIsEmpty
+                          ? () {}
+                          : () async {
+                              final email = _controller.text;
+                              context
+                                  .read<AuthBloc>()
+                                  .add(AuthEventForgotPassword(email: email));
+                            },
                       child: const Text(
                         "Send Reset Password Link",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () async {
-                        final email = _controller.text;
-                        context
-                            .read<AuthBloc>()
-                            .add(AuthEventForgotPassword(email: email));
-                      },
                     ),
                   ),
                 ),

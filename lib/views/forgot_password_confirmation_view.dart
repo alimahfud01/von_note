@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../services/auth/bloc/auth_bloc.dart';
+import '../services/auth/bloc/auth_event.dart';
 import '../services/timer/bloc/timer_bloc.dart';
 import '../services/timer/ticker.dart';
 
@@ -21,6 +23,7 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = (ModalRoute.of(context)?.settings.arguments) as Map;
     final duration = context.select((TimerBloc bloc) => bloc.state.duration);
     final minutesStr =
         ((duration / 60) % 60).floor().toString().padLeft(2, '0');
@@ -44,10 +47,10 @@ class Content extends StatelessWidget {
                 "Link has been sent!",
               ),
               const SizedBox(height: 10),
-              const Expanded(
+              Expanded(
                 flex: 0,
                 child: Text(
-                  "We have sent link to reset your password to email",
+                  "We have sent link to reset your password to ${args['email']}",
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -83,6 +86,9 @@ class Content extends StatelessWidget {
                                       context
                                           .read<TimerBloc>()
                                           .add(const TimerReset());
+                                      context.read<AuthBloc>().add(
+                                          AuthEventForgotPassword(
+                                              email: args['email']));
                                     },
                                 ),
                                 const TextSpan(
