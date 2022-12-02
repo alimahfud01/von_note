@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../constants/routes.dart';
+import 'package:von_note/services/auth/bloc/auth_bloc.dart';
+import 'package:von_note/services/auth/bloc/auth_event.dart';
 import '../services/auth/auth_service.dart';
 import '../utilities/snackbars/only_text_snackbar.dart';
 
@@ -64,8 +65,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                  context.read<AuthBloc>().add(const AuthEventLogOut());
                 },
               ),
             ),
@@ -88,7 +88,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          await AuthService.firebase().sendEmailVerification();
+                          context
+                              .read<AuthBloc>()
+                              .add(AuthEventSendEmailVerification());
                           if (!mounted) return;
                           onlyTextSnackbar(context, "Email sent succesfully");
                         },

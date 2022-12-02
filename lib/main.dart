@@ -1,97 +1,80 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:von_note/constants/routes.dart';
-import 'package:von_note/services/auth/auth_service.dart';
+import 'package:von_note/helpers/loading/loading_screen.dart';
+import 'package:von_note/services/auth/bloc/auth_bloc.dart';
+import 'package:von_note/services/auth/bloc/auth_event.dart';
+import 'package:von_note/services/auth/bloc/auth_state.dart';
+import 'package:von_note/services/auth/firebase_auth_provider.dart';
 import 'package:von_note/utilities/themes/custom_theme.dart';
 import 'package:von_note/utilities/themes/themes.dart';
+import 'package:von_note/views/forgot_password_view.dart';
 import 'package:von_note/views/login_view.dart';
 import 'package:von_note/views/notes/create_update_note_view.dart';
 import 'package:von_note/views/notes/notes_view.dart';
 import 'package:von_note/views/register_view.dart';
+import 'package:von_note/views/splash_view.dart';
 import 'package:von_note/views/verify_email_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-      const CustomTheme(initialThemeKey: ThemeKeys.light, child: HomePage()));
+    const CustomTheme(
+      initialThemeKey: ThemeKeys.light,
+      child: HomePage(),
+    ),
+  );
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Von Note',
       theme: CustomTheme.of(context),
       routes: {
-        noteRoute: (context) => const NotesView(),
-        loginRoute: (context) => const LoginView(),
-        registerRoute: (context) => const RegisterView(),
-        verifyEmailRoute: (context) => const VerifyEmailView(),
         createUpdateNoteView: (context) => const CreateUpdateNoteView(),
       },
-      home: FutureBuilder(
-        future: AuthService.firebase().initialize(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              {
-                SchedulerBinding.instance.addPostFrameCallback((_) {
-                  final user = AuthService.firebase().currentUser;
-                  Timer(const Duration(seconds: 2), () {
-                    if (user != null) {
-                      if (!user.isEmailVerified) {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            verifyEmailRoute, (route) => false);
-                      } else {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            noteRoute, (route) => false);
-                      }
-                    } else {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          loginRoute, (route) => false);
-                    }
-                  });
-                });
-                return splash(context);
-              }
-            default:
-              return splash(context);
-          }
-        },
-      ),
+      home: BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(FirebaseAuthProvider()),
+          child: const Content()),
     );
   }
+}
 
-  splash(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 25, 30, 70),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.4,
-            ),
-            const SizedBox(
-              width: 50,
-              child: LinearProgressIndicator(
-                color: Colors.blue,
-              ),
-            )
-          ],
-        ),
-      ),
+class Content extends StatelessWidget {
+  const Content({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    context.read<AuthBloc>().add(const AuthEventInitialize());
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.isLoading) {
+          LoadingScreen().show(
+            context: context,
+            text: state.loadingText ?? 'Please wait a moment',
+          );
+        } else {
+          LoadingScreen().hide();
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthStateLoggedIn) {
+          return const NotesView();
+        } else if (state is AuthStateNeedVerification) {
+          return const VerifyEmailView();
+        } else if (state is AuthStateLoggedOut) {
+          return const LoginView();
+        } else if (state is AuthStateRegistering) {
+          return const RegisterView();
+        } else if (state is AuthStateForgotPassword) {
+          return const ForgotPasswordView();
+        } else {
+          return const Splash();
+        }
+      },
     );
   }
 }
