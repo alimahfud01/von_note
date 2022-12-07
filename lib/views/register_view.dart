@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import 'package:von_note/services/auth/bloc/auth_state.dart';
@@ -39,13 +40,14 @@ class _RegisterViewState extends State<RegisterView> {
       listener: (context, state) {
         if (state is AuthStateRegistering) {
           if (state.exception is WeakPasswordAuthException) {
-            onlyTextSnackbar(context, "The Password Is Weak");
+            onlyTextSnackbar(context, context.loc.register_error_weak_password);
           } else if (state.exception is EmailAlreadyInUseAuthException) {
-            onlyTextSnackbar(context, "Email Already In Use");
+            onlyTextSnackbar(
+                context, context.loc.register_error_email_already_in_use);
           } else if (state.exception is GenericAuthException) {
-            onlyTextSnackbar(context, "Authentication Error");
+            onlyTextSnackbar(context, context.loc.error);
           } else if (state.exception is InvalidEmailAuthException) {
-            onlyTextSnackbar(context, "Invalid Email");
+            onlyTextSnackbar(context, context.loc.register_error_invalid_email);
           }
         }
         if (state is AuthStateNeedVerification) {
@@ -53,7 +55,7 @@ class _RegisterViewState extends State<RegisterView> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text("Register")),
+        appBar: AppBar(title: Text(context.loc.register)),
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -71,7 +73,7 @@ class _RegisterViewState extends State<RegisterView> {
                         keyboardType: TextInputType.emailAddress,
                         controller: _email,
                         decoration: InputDecoration(
-                          hintText: "Email",
+                          hintText: context.loc.email,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                         ),
@@ -85,7 +87,7 @@ class _RegisterViewState extends State<RegisterView> {
                           autocorrect: false,
                           keyboardType: TextInputType.visiblePassword,
                           decoration: InputDecoration(
-                              hintText: "Password",
+                              hintText: context.loc.password,
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12)),
                               suffixIcon: IconButton(
@@ -110,9 +112,9 @@ class _RegisterViewState extends State<RegisterView> {
                           minWidth: 200,
                           height: 48,
                           color: Theme.of(context).primaryColor,
-                          child: const Text(
-                            "Register",
-                            style: TextStyle(color: Colors.white),
+                          child: Text(
+                            context.loc.register,
+                            style: const TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
                             final email = _email.text;

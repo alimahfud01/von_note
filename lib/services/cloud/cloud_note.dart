@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:von_note/services/cloud/cloud_storagte_constants.dart';
-import 'package:flutter/cupertino.dart';
 
 @immutable
 class CloudNote {

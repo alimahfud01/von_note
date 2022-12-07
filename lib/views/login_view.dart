@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:von_note/constants/routes.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import 'package:von_note/services/auth/bloc/auth_state.dart';
@@ -40,18 +41,19 @@ class _LoginViewState extends State<LoginView> {
       listener: (context, state) {
         if (state is AuthStateLoggedOut) {
           if (state.exception is UserNotFoundAuthException) {
-            onlyTextSnackbar(context, "User Not Found");
+            onlyTextSnackbar(context, context.loc.login_error_cannot_find_user);
           } else if (state.exception is WrongPasswordAuthException) {
-            onlyTextSnackbar(context, "Wrong Credential");
+            onlyTextSnackbar(
+                context, context.loc.login_error_wrong_credentials);
           } else if (state.exception is GenericAuthException) {
-            onlyTextSnackbar(context, "Authentication Error");
+            onlyTextSnackbar(context, context.loc.error);
           }
         } else if (state is AuthStateLoggedIn) {
-          onlyTextSnackbar(context, "Login Successful");
+          onlyTextSnackbar(context, context.loc.login_succesfull);
         }
       },
       child: Scaffold(
-          appBar: AppBar(title: const Text("Login")),
+          appBar: AppBar(title: Text(context.loc.login)),
           body: Center(
             child: Stack(children: [
               SingleChildScrollView(
@@ -69,7 +71,7 @@ class _LoginViewState extends State<LoginView> {
                         keyboardType: TextInputType.emailAddress,
                         controller: _email,
                         decoration: InputDecoration(
-                          hintText: "Email",
+                          hintText: context.loc.email,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                         ),
@@ -83,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
                           autocorrect: false,
                           keyboardType: TextInputType.visiblePassword,
                           decoration: InputDecoration(
-                            hintText: "Password",
+                            hintText: context.loc.password,
                             suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -106,7 +108,7 @@ class _LoginViewState extends State<LoginView> {
                             Navigator.of(context).pushNamed(forgotPasswordView);
                           },
                           child: Text(
-                            "Forgot password",
+                            context.loc.forgot_password,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor),
                           ),
@@ -125,9 +127,9 @@ class _LoginViewState extends State<LoginView> {
                             minWidth: 200,
                             height: 48,
                             color: Theme.of(context).primaryColor,
-                            child: const Text(
-                              "Login",
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              context.loc.login,
+                              style: const TextStyle(color: Colors.white),
                             ),
                             onPressed: () async {
                               final email = _email.text;
@@ -143,16 +145,13 @@ class _LoginViewState extends State<LoginView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Don't have an account? "),
+                          Text(context.loc.dont_have_account),
                           GestureDetector(
                             onTap: () {
-                              context
-                                  .read<AuthBloc>()
-                                  .add(const AuthEventShouldRegister());
                               Navigator.of(context).pushNamed(registerView);
                             },
                             child: Text(
-                              "Register here!",
+                              context.loc.register_here,
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor),
                             ),

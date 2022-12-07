@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import 'package:von_note/services/cloud/cloud_note.dart';
@@ -42,10 +43,10 @@ class _NotesViewState extends State<NotesView> {
               icon: const Icon(Icons.add)),
           PopupMenuButton(
             itemBuilder: (context) {
-              return const [
+              return [
                 PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text('Logout'),
+                  child: Text(context.loc.logout_button),
                 )
               ];
             },
@@ -70,12 +71,12 @@ class _NotesViewState extends State<NotesView> {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text("Waiting for all notes..."),
-                    SizedBox(
+                  children: [
+                    Text(context.loc.waiting_all_notes),
+                    const SizedBox(
                       height: 10,
                     ),
-                    CircularProgressIndicator()
+                    const CircularProgressIndicator()
                   ],
                 ),
               );
@@ -95,7 +96,7 @@ class _NotesViewState extends State<NotesView> {
                         const SizedBox(
                           height: 20,
                         ),
-                        const Text('Your note is empty')
+                        Text(context.loc.your_note_is_empty)
                       ],
                     ),
                   );

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 
 import '../services/auth/bloc/auth_bloc.dart';
 import '../services/auth/bloc/auth_event.dart';
@@ -33,7 +34,7 @@ class Content extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        title: const Text('Email Sent!'),
+        title: Text(context.loc.email_sent),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -43,14 +44,14 @@ class Content extends StatelessWidget {
             children: [
               Image.asset('assets/images/mailsent.png'),
               const SizedBox(height: 30),
-              const Text(
-                "Link has been sent!",
+              Text(
+                context.loc.link_has_been_sent,
               ),
               const SizedBox(height: 10),
               Expanded(
                 flex: 0,
                 child: Text(
-                  "We have sent link to reset your password to ${args['email']}",
+                  context.loc.we_have_sent_link + args['email'],
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -70,15 +71,15 @@ class Content extends StatelessWidget {
                         .add(TimerStarted(duration: state.duration));
                     return (secondsStr != "00")
                         ? Text(
-                            "Haven't received? Resend in $minutesStr:$secondsStr second",
+                            "${context.loc.havent_received} ${context.loc.resend_in} $minutesStr:$secondsStr ${context.loc.second}",
                             textAlign: TextAlign.center,
                           )
                         : RichText(
                             text: TextSpan(
-                              text: "Haven't received? ",
+                              text: context.loc.havent_received,
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Resend ',
+                                  text: context.loc.resend,
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColor),
                                   recognizer: TapGestureRecognizer()
@@ -92,11 +93,13 @@ class Content extends StatelessWidget {
                                       Navigator.of(context).pop();
                                     },
                                 ),
-                                const TextSpan(
-                                  text: 'or ',
+                                TextSpan(
+                                  text: context.loc.or,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 TextSpan(
-                                  text: 'Change Email',
+                                  text: context.loc.change_email,
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColor),
                                   recognizer: TapGestureRecognizer()

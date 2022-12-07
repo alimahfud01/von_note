@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import '../services/auth/auth_service.dart';
@@ -19,7 +20,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify Email')),
+      appBar: AppBar(title: Text(context.loc.verify_email)),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -30,7 +31,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             ),
             RichText(
               text: TextSpan(
-                text: 'Hi ',
+                text: '${context.loc.hi}, ',
                 style: const TextStyle(color: Colors.black),
                 children: <TextSpan>[
                   TextSpan(
@@ -41,9 +42,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const TextSpan(
-                      text:
-                          ", we've sent you email verification. Please open it to verify your email."),
+                  TextSpan(text: context.loc.we_have_sent_email),
                 ],
               ),
             ),
@@ -60,9 +59,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 minWidth: 200,
                 height: 48,
                 color: Theme.of(context).primaryColor,
-                child: const Text(
-                  "Login here",
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  context.loc.login,
+                  style: const TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
                   context.read<AuthBloc>().add(const AuthEventLogOut());
@@ -76,12 +75,12 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               alignment: Alignment.centerLeft,
               child: RichText(
                 text: TextSpan(
-                  text: "Haven't received a verification email?",
+                  text: context.loc.havent_received,
                   style: const TextStyle(
                       color: Colors.black, fontStyle: FontStyle.italic),
                   children: <TextSpan>[
                     TextSpan(
-                      text: ' Resend',
+                      text: " ${context.loc.resend}",
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w500,
@@ -92,7 +91,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                               .read<AuthBloc>()
                               .add(AuthEventSendEmailVerification());
                           if (!mounted) return;
-                          onlyTextSnackbar(context, "Email sent succesfully");
+                          onlyTextSnackbar(context, context.loc.email_sent);
                         },
                     ),
                   ],

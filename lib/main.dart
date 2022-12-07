@@ -14,8 +14,8 @@ import 'package:von_note/views/login_view.dart';
 import 'package:von_note/views/notes/create_update_note_view.dart';
 import 'package:von_note/views/notes/notes_view.dart';
 import 'package:von_note/views/register_view.dart';
-import 'package:von_note/views/splash_view.dart';
 import 'package:von_note/views/verify_email_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +34,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = AuthBloc(FirebaseAuthProvider());
     return MaterialApp(
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       debugShowCheckedModeBanner: false,
       title: 'Von Note',
       theme: CustomTheme.of(context),

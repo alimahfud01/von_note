@@ -1,0 +1,69 @@
+{
+    "logout_button": "Keluar",
+    "note": "Catatan",
+    "cancel": "Batal",
+    "yes": "Ya",
+    "delete": "Hapus",
+    "sharing": "Bagikan",
+    "ok": "Ok",
+    "email": "Email",
+    "password": "Kata sandi",
+    "error": "Terjadi Kesalahan",
+    "login": "Masuk",
+    "verify_email": "Konfirmasi email",
+    "register": "Daftar",
+    "hi": "Hi",
+
+    "we_have_sent_email": "Kami telah mengirimkan email konfirmasi. Mohon cek email anda dan korfirmasi akun anda.",
+
+    "start_typing_your_note": "Tulis catatan di sini",
+    "delete_note_prompt": "Ingin menghapus catatan?",
+    "cannot_share_empty_note_prompt": "Tidak bisa membagikan catatan kosong!",
+    "logout_dialog_prompt": "Yakin ingin keluar akun?",
+
+    "waiting_all_notes": "Menunggu catatan...",
+    "your_note_is_empty": "Catatan kosong",
+
+    "password_reset": "Ganti kata sandi",
+    "password_reset_dialog_prompt": "Kami telah mengirimkan email untuk mengganti password. Silahkan cek email untuk tahap selanjutnya",
+
+    "login_error_cannot_find_user": "Pengguna tidak ditemukan dari data yang diberikan",
+    "login_error_wrong_credentials": "Email/kata sandi salah",
+    "login_error_auth_error": "Autentikasi error",
+    "login_succesfull": "Berhasil Masuk",
+    "login_view_forgot_password": "Lupa katasandi",
+    "dont_have_account": "Belum punya akun?",
+    "register_here": " Daftar disini!",
+    
+    "forgot_password": "Lupa Kata Sandi",
+    "your_email_address": "Isikan alamat email...",
+    "forgot_password_view_generic_error": "Kami tidak dapat memproses permintaan anda. Pastikan anda merupakan terdaftar sebagai pengguna.",
+    "forgot_password_view": "Masukan email anda untuk mengganti kata sandi",
+    "forgot_password_view_send_me_link": "Kirim Link Ganti Kata Sandi",
+
+    "email_sent": "Email Terkirim!",
+    "link_has_been_sent": "Link telah terkirim!",
+    "we_have_sent_link": "Kami telah mengirimkan link untuk mengganti kata sandi ke alamat email ",
+    "resend": "Kirim Ulang ",
+    "change_email": "Ganti Email",
+    "or": "atau ",
+    "havent_received": "Belum diterima?",
+    "resend_in": "Kirim ulang dalam",
+    "second": "Detik",
+    "please_wait_while": "Mohon tunggu",
+
+    "register_error_weak_password": "Password yang anda masukkan lemah. Coba lagi!",
+    "register_error_email_already_in_use": "Alamat email telah terdaftar!",
+    "register_error_generic": "Gagal untuk mendaftar. Mohon coba beberapa saat lagi!",
+    "register_error_invalid_email": "Alamat email yang anda masukkan tidak valid!",
+
+    "notes_title": "{count, plural, =0{No notes yet} =1{1 note} other{{count} notes}}",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 notes"
+            }
+        }
+    }
+}

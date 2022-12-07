@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 import 'package:von_note/utilities/dialogs/generic_dialog.dart';
 
 Future<void> showErrorDialog(
@@ -11,7 +12,7 @@ Future<void> showErrorDialog(
     title: title,
     content: text,
     optionsBuilder: () => {
-      'Ok': null,
+      context.loc.ok: null,
     },
   );
 }

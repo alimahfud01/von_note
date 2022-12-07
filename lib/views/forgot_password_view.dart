@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:von_note/constants/routes.dart';
+import 'package:von_note/extensions/buildcontext/loc.dart';
 import 'package:von_note/services/auth/bloc/auth_bloc.dart';
 import 'package:von_note/services/auth/bloc/auth_event.dart';
 import 'package:von_note/services/auth/bloc/auth_state.dart';
 import 'package:von_note/utilities/dialogs/error_dialog.dart';
-import 'package:von_note/views/forgot_password_confirmation_view.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -60,8 +60,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             if (!mounted) return;
             await showErrorDialog(
               context,
-              'We could not process your request. Please make sure that you are a registered user',
-              'Error',
+              context.loc.forgot_password_view_generic_error,
+              context.loc.error,
             );
           }
         }
@@ -69,8 +69,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text(
-            "Forgot Password",
+          title: Text(
+            context.loc.forgot_password,
           ),
         ),
         body: SingleChildScrollView(
@@ -92,11 +92,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                       children: [
                         SvgPicture.asset('assets/images/info.svg'),
                         const SizedBox(width: 10),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Expanded(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4, bottom: 4),
                             child: Text(
-                              "Enter your email to change your password",
+                              context.loc.forgot_password_view,
                             ),
                           ),
                         )
@@ -113,7 +113,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     autofocus: true,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: "Your email address...",
+                      labelText: context.loc.your_email_address,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -151,9 +151,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                   .read<AuthBloc>()
                                   .add(AuthEventForgotPassword(email: email));
                             },
-                      child: const Text(
-                        "Send Reset Password Link",
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        context.loc.forgot_password_view_send_me_link,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
